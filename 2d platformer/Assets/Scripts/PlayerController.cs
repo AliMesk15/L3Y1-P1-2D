@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
+using UnityEditor.Tilemaps;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -9,6 +11,15 @@ public class PlayerController : MonoBehaviour
     [Header("UI")]
     public TMP_Text timerTxt;
     public float timer;
+
+    [Header("Health")]
+    public int MaxHealth;
+    public int CurrentHealth;
+
+    [Header("Shooting")]
+    public Transform shootingPoint;
+    public GameObject Bullet;
+    bool IsFacingRight;
 
     [Header("Main")]
     public float moveSpeed;
@@ -25,7 +36,9 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        CurrentHealth = MaxHealth;
         startPos = transform.position;
+        IsFacingRight = true;
     }
 
     // Update is called once per frame
@@ -35,6 +48,9 @@ public class PlayerController : MonoBehaviour
         timerTxt.text = timer.ToString("F2");
         
         Movement();
+        Health();
+        Shoot();
+        MovementDirection();
     }
 
     void Movement()
@@ -54,6 +70,38 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    void Health()
+    {
+        if (CurrentHealth <= 0)
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
+    }
+
+    void Shoot()
+{
+    if (Input.GetKeyDown(KeyCode.Mouse0))
+    {
+        Instantiate(Bullet, shootingPoint.position, shootingPoint.rotation);
+    }
+}
+void MovementDirection()
+{
+    if (IsFacingRight && inputs <-.1f)
+    {
+        Flip();
+    }
+    else if (!IsFacingRight && inputs > .1f)
+    {
+        Flip();
+    }
+}  
+
+    void Flip ()
+    {
+    IsFacingRight = !IsFacingRight;
+    transform.Rotate(0f, 180f, 0f);
+    }
     private void OnTriggerEnter2D(Collider2D other) 
     {
         if (other.gameObject.CompareTag("Hazard"))
@@ -64,5 +112,11 @@ public class PlayerController : MonoBehaviour
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
+        if (other.gameObject.CompareTag("Enemy"))
+        {
+            CurrentHealth--;
+            Destroy(other.gameObject);
+        }
     }
 }
+

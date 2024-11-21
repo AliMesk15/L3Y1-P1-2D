@@ -503,6 +503,10 @@ PrefabInstance:
       propertyPath: timerTxt
       value: 
       objectReference: {fileID: 3835606249385247193}
+    - target: {fileID: 3900071628626283036, guid: c466b314c2ab3164fa0823385750267f, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.6
+      objectReference: {fileID: 0}
     - target: {fileID: 5224201401940550583, guid: c466b314c2ab3164fa0823385750267f, type: 3}
       propertyPath: m_Name
       value: Player
