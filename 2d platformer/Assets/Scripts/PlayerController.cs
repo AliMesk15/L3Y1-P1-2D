@@ -4,6 +4,7 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEditor.Tilemaps;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
@@ -13,6 +14,7 @@ public class PlayerController : MonoBehaviour
     public float timer;
 
     [Header("Health")]
+    public Slider healthSlider;
     public int MaxHealth;
     public int CurrentHealth;
 
@@ -39,6 +41,8 @@ public class PlayerController : MonoBehaviour
         CurrentHealth = MaxHealth;
         startPos = transform.position;
         IsFacingRight = true;
+        healthSlider.maxValue = MaxHealth;
+        
     }
 
     // Update is called once per frame
@@ -72,6 +76,8 @@ public class PlayerController : MonoBehaviour
 
     void Health()
     {
+        healthSlider.value = CurrentHealth;
+      
         if (CurrentHealth <= 0)
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
